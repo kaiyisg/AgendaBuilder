@@ -1,12 +1,17 @@
 package com.interactionprog.agendabuilder.android.view;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.interactionprog.agendabuilder.R;
+import com.interactionprog.agendabuilder.android.AgendaBuilderApplication;
 import com.interactionprog.agendabuilder.model.Activity;
 
 public class ActivityEditorDialog {
@@ -24,19 +29,30 @@ public class ActivityEditorDialog {
         this.view = view;
         this.editActivity = act;
 
+        //inflating the layout
+        LayoutInflater inflater = (LayoutInflater) AgendaBuilderApplication.getAppContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View activityEditorView = inflater.inflate(R.layout.editor_activity_dialog, null);
+
+        //creating the dialog alert to add stuff
+        final Dialog dialog = new Dialog(activityEditorView.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.editor_activity_dialog);
+
+
         //intializing the spinner to hold different numbers
-        Spinner dropdown = (Spinner)view.findViewById(R.id.spinner);
+        Spinner dropdown = (Spinner)activityEditorView.findViewById(R.id.spinner);
         String[] items = new String[]{"Presentation", "Group Work", "Discussion", "Break"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activityEditorView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
         //initializing the other UI components
-        nameActivity = (EditText)view.findViewById(R.id.editText);
-        lengthActivity = (EditText)view.findViewById(R.id.editText2);
-        descriptionActivity = (EditText)view.findViewById(R.id.editText3);
-        saveActivity = (Button)view.findViewById(R.id.button);
-        cancelActivity = (Button)view.findViewById(R.id.button2);
+        nameActivity = (EditText)activityEditorView.findViewById(R.id.editText);
+        lengthActivity = (EditText)activityEditorView.findViewById(R.id.editText2);
+        descriptionActivity = (EditText)activityEditorView.findViewById(R.id.editText3);
+        saveActivity = (Button)activityEditorView.findViewById(R.id.button);
+        cancelActivity = (Button)activityEditorView.findViewById(R.id.button2);
 
         //populate fields if there are fields to populate
         if(editActivity!=null){
@@ -59,6 +75,8 @@ public class ActivityEditorDialog {
 
                 //save into a new activity if it does not previously exist
 
+                dialog.cancel();
+
             }
         });
 
@@ -67,9 +85,13 @@ public class ActivityEditorDialog {
             @Override
             public void onClick(View v) {
 
+                dialog.cancel();
+
             }
         });
 
+
+        dialog.show();
     }
 
 }

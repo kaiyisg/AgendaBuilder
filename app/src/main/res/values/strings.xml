@@ -3,11 +3,19 @@
     <string name="title_activity_agenda">AgendaActivity</string>
 
 
-    <!--strings for activity_editor_dialog.xml-->
+    <!--strings for editor_activity_dialog.xml-->
     <string name="name">Name</string>
     <string name="length">Length</string>
     <string name="min">min</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+
+    <!--strings for bg_activities_view.xml-->
+    <string name="welcome_to_agenda_builder">Welcome to Agenda Builder!</string>
+    <string name="you_have">You have</string>
+    <string name="zero">0</string>
+    <string name="unplanned_activity">Parked Activities</string>
+    <string name="add_activity">Add Activity</string>
+    <string name="go_to_agenda">Go to Agenda Planning</string>
 </resources>
