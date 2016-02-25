@@ -1,8 +1,10 @@
-package com.interactionprog.agendabuilder;
+package com.interactionprog.agendabuilder.android;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.interactionprog.agendabuilder.R;
 
 public class MainActivity extends AppCompatActivity {
 
