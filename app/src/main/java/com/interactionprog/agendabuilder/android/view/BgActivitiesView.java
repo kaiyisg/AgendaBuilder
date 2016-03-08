@@ -30,27 +30,6 @@ public class BgActivitiesView implements Observer {
         addActivityButton = (Button)view.findViewById(R.id.button3);
         goToAgendaPlanningButton = (Button)view.findViewById(R.id.button4);
 
-        addActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                ActivityEditorDialog activityEditorDialog =
-                        new ActivityEditorDialog(v.findViewById(
-                                R.id.editor_activity_dialog_id), null);
-
-            }
-        });
-
-        goToAgendaPlanningButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                Intent intent = new Intent;
-
-            }
-        });
-
     }
 
     @Override
