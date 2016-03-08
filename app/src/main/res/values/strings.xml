@@ -11,6 +11,16 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
+    <!--strings for all_activities_view.xml-->
+    <string name="activity_name">Name: </string>
+    <string name="activity_length">Length: </string>
+    <string name="no_select">Select an activity!</string>
+    <string name="activity_type">Type: </string>
+    <string name="activity_description">Description: </string>
+    <string name="edit_selected">Edit Selected Activity</string>
+    <string name="activity_editing">Activity Editing</string>
+
+
     <!--strings for bg_activities_view.xml-->
     <string name="welcome_to_agenda_builder">Welcome to Agenda Builder!</string>
     <string name="you_have">You have</string>
