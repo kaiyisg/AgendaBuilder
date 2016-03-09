@@ -4,10 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-public class AgendaModel extends Observable {
+public final class AgendaModel extends Observable {
+
+    private static AgendaModel instance = null;
 
     List<Day> days = new ArrayList<Day>();
     List<Activity> parkedActivites = new ArrayList<Activity>();
+
+    //making this class a singleton class
+    private AgendaModel(){
+    }
+
+    public static AgendaModel getInstance(){
+        if (instance ==null){
+            instance = new AgendaModel();
+        }
+        return instance;
+    }
 
     /**
      * adds create and add a new day to model with starting time (hours and minutes)

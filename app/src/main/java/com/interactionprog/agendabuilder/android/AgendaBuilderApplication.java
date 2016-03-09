@@ -10,7 +10,7 @@ import com.interactionprog.agendabuilder.model.AgendaModel;
  */
 public class AgendaBuilderApplication extends Application {
 
-    private AgendaModel model = new AgendaModel();
+    private AgendaModel model = AgendaModel.getInstance();
     private static Context context;
 
     public void onCreate() {

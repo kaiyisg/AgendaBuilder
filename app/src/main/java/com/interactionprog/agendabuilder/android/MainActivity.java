@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.ActivityEditorDialog;
+import com.interactionprog.agendabuilder.android.view.AllActivitiesView;
 import com.interactionprog.agendabuilder.android.view.BgActivitiesView;
 import com.interactionprog.agendabuilder.model.AgendaModel;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     AgendaModel agendaModel;
     Button addActivityButton;
     Button goToAgendaPlanningButton;
+    Button editSelectedActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +38,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        //initializing buttons and getting model
         AgendaBuilderApplication app = new AgendaBuilderApplication();
         agendaModel = app.getModel();
-
-        BgActivitiesView bgActivitiesView = new BgActivitiesView(
-                findViewById(R.id.bg_activities_id), agendaModel);
-
         addActivityButton = (Button)findViewById(R.id.button3);
         goToAgendaPlanningButton = (Button)findViewById(R.id.button4);
+        editSelectedActivityButton = (Button)findViewById(R.id.button5);
 
+        //initializing views
+        BgActivitiesView bgActivitiesView = new BgActivitiesView(
+                findViewById(R.id.bg_activities_id), agendaModel);
+        AllActivitiesView allActivitiesView = new AllActivitiesView(
+                findViewById(R.id.all_activities_id), agendaModel);
 
 
         addActivityButton.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-
                         dialog.cancel();
 
                     }
@@ -124,12 +128,9 @@ public class MainActivity extends AppCompatActivity {
                 cancelActivity.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         dialog.cancel();
-
                     }
                 });
-
 
                 dialog.show();
 
@@ -141,6 +142,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Intent intent = new Intent;
+
+            }
+        });
+
+        editSelectedActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
 
             }
         });
