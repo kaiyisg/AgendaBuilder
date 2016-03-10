@@ -18,14 +18,18 @@ import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.AgendaBuilderApplication;
 import com.interactionprog.agendabuilder.model.Activity;
 
+import org.w3c.dom.Text;
+
 public class ActivityEditorDialog {
 
     View view;
     Activity editActivity;
-    EditText nameActivity;
-    EditText lengthActivity;
-    EditText descriptionActivity;
+    static EditText nameActivity;
+    static EditText lengthActivity;
+    static EditText descriptionActivity;
     TextView minView;
+    static TextView warningPromptView;
+    static Spinner dropdown;
 
     public ActivityEditorDialog(View activityEditorView, Activity act){
 
@@ -51,7 +55,7 @@ public class ActivityEditorDialog {
 
 
         //intializing the spinner to hold different numbers
-        Spinner dropdown = (Spinner)activityEditorView.findViewById(R.id.spinner);
+        dropdown = (Spinner)activityEditorView.findViewById(R.id.spinner);
         String[] items = new String[]{"Presentation", "Group Work", "Discussion", "Break"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(activityEditorView.getContext(),
                 R.layout.spinner_item, items);
@@ -62,12 +66,14 @@ public class ActivityEditorDialog {
         lengthActivity = (EditText)activityEditorView.findViewById(R.id.editText2);
         descriptionActivity = (EditText)activityEditorView.findViewById(R.id.editText3);
         minView = (TextView)activityEditorView.findViewById(R.id.textView);
+        warningPromptView = (TextView)activityEditorView.findViewById(R.id.textView14);
 
         //changing text color
         nameActivity.setTextColor(Color.BLACK);
         lengthActivity.setTextColor(Color.BLACK);
         descriptionActivity.setTextColor(Color.BLACK);
         minView.setTextColor(Color.BLACK);
+        warningPromptView.setTextColor(Color.BLACK);
         nameActivity.setHintTextColor(AgendaBuilderApplication.getAppContext().getResources().getColor(R.color.lightGrey));
         lengthActivity.setHintTextColor(AgendaBuilderApplication.getAppContext().getResources().getColor(R.color.lightGrey));
         descriptionActivity.setHintTextColor(AgendaBuilderApplication.getAppContext().getResources().getColor(R.color.lightGrey));
@@ -80,6 +86,19 @@ public class ActivityEditorDialog {
             dropdown.setSelection(editActivity.getType() - 1);
         }
 
+    }
+
+    public static void setWarningMessage(String warningMessage){
+
+        warningPromptView.setText(warningMessage);
+
+    }
+
+    public static void setDetailsOfActivityToEdit(Activity act){
+        nameActivity.setText(act.getName());
+        lengthActivity.setText(String.valueOf(act.getLength()));
+        descriptionActivity.setText(act.getDescription());
+        dropdown.setSelection(act.getType()-1);
     }
 
 }

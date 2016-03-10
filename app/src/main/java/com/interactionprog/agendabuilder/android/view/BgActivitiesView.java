@@ -29,11 +29,17 @@ public class BgActivitiesView implements Observer {
         numberOfActivitiesParked = (TextView)view.findViewById(R.id.textView4);
         addActivityButton = (Button)view.findViewById(R.id.button3);
         goToAgendaPlanningButton = (Button)view.findViewById(R.id.button4);
+        updateParkedActivitiesNumber();
 
+        agendaModel.addObserver(this);
     }
 
     @Override
     public void update(Observable observable, Object data) {
+        updateParkedActivitiesNumber();
+    }
 
+    private void updateParkedActivitiesNumber(){
+        numberOfActivitiesParked.setText(String.valueOf(agendaModel.getParkedActivites().size()));
     }
 }

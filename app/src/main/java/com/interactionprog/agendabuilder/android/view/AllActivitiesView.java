@@ -35,7 +35,7 @@ public class AllActivitiesView implements Observer {
 
         updateParkedActivityList();
 
-        //updateParkedActivityDetails();
+        agendaModel.addObserver(this);
     }
 
     @Override
@@ -75,12 +75,14 @@ public class AllActivitiesView implements Observer {
                 activityChoice = a;
             }
         }
-
         if(activityChoice!=null){
             lengthTextView.setText(String.valueOf(activityChoice.getLength()));
             typeTextView.setText(activityChoice.getTypeInString());
             descriptionTextView.setText(activityChoice.getDescription());
-
+        }else{
+            lengthTextView.setText("Please select an activity!");
+            typeTextView.setText("Please select an activity!");
+            descriptionTextView.setText("Please select an activity!");
         }
     }
 

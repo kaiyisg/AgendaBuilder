@@ -1,31 +1,29 @@
 package com.interactionprog.agendabuilder.android;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.ActivityEditorDialog;
 import com.interactionprog.agendabuilder.android.view.AllActivitiesView;
 import com.interactionprog.agendabuilder.android.view.BgActivitiesView;
+import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner parkedActivitySelectorDropdown;
     BgActivitiesView bgActivitiesView;
     AllActivitiesView allActivitiesView;
+    TextView warningPromptView;
+    ActivityEditorDialog activityEditorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         goToAgendaPlanningButton = (Button)findViewById(R.id.button4);
         editSelectedActivityButton = (Button)findViewById(R.id.button5);
         parkedActivitySelectorDropdown = (Spinner)findViewById(R.id.spinner2);
+        warningPromptView = (TextView)findViewById(R.id.textView14);
 
         //initializing views
         bgActivitiesView = new BgActivitiesView(findViewById(R.id.bg_activities_id), agendaModel);
@@ -66,84 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                //inflating the layout
-                LayoutInflater inflater = (LayoutInflater) AgendaBuilderApplication.getAppContext()
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View activityEditorView = inflater.inflate(R.layout.editor_activity_dialog, null);
-
-                //initializing buttons and widgets in dialog
-                Button saveActivity = (Button)activityEditorView.findViewById(R.id.button);
-                Button cancelActivity = (Button)activityEditorView.findViewById(R.id.button2);
-                final EditText nameActivity = (EditText)activityEditorView.findViewById(R.id.editText);
-                final EditText lengthActivity = (EditText)activityEditorView.findViewById(R.id.editText2);
-                final EditText descriptionActivity = (EditText)activityEditorView.findViewById(R.id.editText3);
-
-                //creating dialog box
-                final Dialog dialog = new Dialog(v.getContext());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(activityEditorView);
-
-                //changing dialog box to go towards the right
-                Window window = dialog.getWindow();
-                WindowManager.LayoutParams wlp = window.getAttributes();
-                wlp.gravity = Gravity.END;
-                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wlp);
-
-                ActivityEditorDialog activityEditorDialog =
-                        new ActivityEditorDialog(activityEditorView, null);
-
-                //setting what happens when we save the activity
-                saveActivity.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        String nameData = nameActivity.getText().toString();
-                        String lengthData = lengthActivity.getText().toString();
-                        String descriptionData = nameActivity.getText().toString();
-
-                        if (nameData.matches("")) {
-
-                            Toast.makeText(AgendaBuilderApplication.getAppContext(),
-                                    "Please enter a title to proceed!", Toast.LENGTH_SHORT).show();
-
-                        } else if (lengthData.matches("")) {
-
-                            Toast.makeText(AgendaBuilderApplication.getAppContext(),
-                                    "Please enter a time period to proceed!", Toast.LENGTH_SHORT).show();
-
-                        } else if (descriptionData.matches("")) {
-
-                            Toast.makeText(AgendaBuilderApplication.getAppContext(),
-                                    "Please enter a description to proceed!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-
-                            //getting all the information from the fields
-
-                            //save into the old activity if it exists
-
-                            //save into a new activity if it does not previously exist
-
-
-                        }
-
-                        dialog.cancel();
-
-                    }
-                });
-
-                //setting what happens when we cancel the activity
-                cancelActivity.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.cancel();
-                    }
-                });
-
-                dialog.show();
-
+                activityEditorDialogOpener(v, null);
             }
         });
 
@@ -157,44 +81,129 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //button to edit the currently selected activity
+        //button to edit the currently selected parked activity
         editSelectedActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String chosenString = parkedActivitySelectorDropdown.getSelectedItem().toString();
+
+                //retrieving the chosen activity
+                List<Activity> allParkedActivities = agendaModel.getParkedActivites();
+                Activity activityChoice = null;
+                for (Activity a: allParkedActivities){
+                    if(a.getName().equals(chosenString)){
+                        activityChoice = a;
+                    }
+                }
+
+                activityEditorDialogOpener(v, activityChoice);
 
             }
         });
 
-        //changing the items in dropdown
+        //changing the details of the items in the parked activities list
         parkedActivitySelectorDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 String chosenString = parkedActivitySelectorDropdown.getSelectedItem().toString();
                 AllActivitiesView.updateParkedActivityDetails(chosenString);
-                //allActivitiesView.update(agendaModel, chosenString);
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                AllActivitiesView.updateParkedActivityDetails("");
             }
         });
 
     }
 
+    private void activityEditorDialogOpener(View v, final Activity activityToEdit){
 
-    private void alertDialogPromptBuilder(String alert, View v){
-        new AlertDialog.Builder(v.getContext())
-                .setTitle("Enter details")
-                .setMessage(alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+        //inflating the layout
+        LayoutInflater inflater = (LayoutInflater) AgendaBuilderApplication.getAppContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View activityEditorView = inflater.inflate(R.layout.editor_activity_dialog, null);
+
+        //initializing buttons and widgets in dialog
+        Button saveActivity = (Button)activityEditorView.findViewById(R.id.button);
+        Button cancelActivity = (Button)activityEditorView.findViewById(R.id.button2);
+        Button deleteActivity = (Button)activityEditorView.findViewById(R.id.button6);
+        final EditText nameActivity = (EditText)activityEditorView.findViewById(R.id.editText);
+        final EditText lengthActivity = (EditText)activityEditorView.findViewById(R.id.editText2);
+        final EditText descriptionActivity = (EditText)activityEditorView.findViewById(R.id.editText3);
+
+        //creating dialog box
+        final Dialog dialog = new Dialog(v.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(activityEditorView);
+
+        //changing dialog box to go towards the right
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.END;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        activityEditorDialog = new ActivityEditorDialog(activityEditorView, null);
+        if(activityToEdit!=null){
+            activityEditorDialog.setDetailsOfActivityToEdit(activityToEdit);
+        }
+
+        //setting what happens when we save the activity
+        saveActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String nameData = nameActivity.getText().toString();
+                String lengthData = lengthActivity.getText().toString();
+                String descriptionData = descriptionActivity.getText().toString();
+
+                //throwing warning prompts for any fields that are not entered properly
+                if (nameData.matches("")) {
+                    ActivityEditorDialog.setWarningMessage("Please enter a title to proceed!");
+                } else if (lengthData.matches("")) {
+                    ActivityEditorDialog.setWarningMessage("Please enter a time period to proceed!");
+                } else if (descriptionData.matches("")) {
+                    ActivityEditorDialog.setWarningMessage("Please enter a description to proceed!");
+                } else {
+
+                    //save into new activity if it previously exisits
+                    if (activityToEdit != null) {
+                        agendaModel.removeParkedActivity(activityToEdit);
                     }
-                }).show();
-    }
 
+                    //save into a new activity
+                    agendaModel.addParkedActivity(new Activity(nameData,
+                            descriptionData,
+                            Integer.valueOf(lengthData),
+                            (parkedActivitySelectorDropdown.getSelectedItemPosition() + 1)));
+
+                    dialog.cancel();
+                }
+            }
+        });
+
+        //setting what happens when we cancel the activity
+        cancelActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        //setting what happens when we delete the activity
+        deleteActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (activityToEdit != null) {
+                    agendaModel.removeParkedActivity(activityToEdit);
+                }
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
 }

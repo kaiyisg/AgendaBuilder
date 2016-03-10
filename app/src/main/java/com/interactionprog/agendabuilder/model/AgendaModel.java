@@ -60,6 +60,24 @@ public final class AgendaModel extends Observable {
     }
 
     /**
+     * remove an activity on provided name from parked activites
+     */
+    public Activity removeParkedActivity(Activity act) {
+
+        int position = 0;
+        for(Activity a: parkedActivites){
+            if(a.equals(act)){
+                break;
+            }
+            position +=1;
+        }
+        parkedActivites.remove(position);
+        setChanged();
+        notifyObservers("ParkedActivityRemoved");
+        return act;
+    }
+
+    /**
      * moves activity between the days, or day and parked activities.
      * to park activity you need to set the newday to null
      * to move a parked activity to let's say first day you set oldday to null

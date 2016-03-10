@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="0dp">
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -85,12 +85,27 @@
             android:id="@+id/button" />
 
         <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:id="@+id/button6" />
+
+        <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
             android:id="@+id/button2" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/msg_prompt"
+        android:id="@+id/textView14"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp" />
 
 
 </LinearLayout>
