@@ -30,4 +30,12 @@
     <string name="unplanned_activity">Parked Activities</string>
     <string name="add_activity">Add Activity</string>
     <string name="go_to_agenda">Go to Agenda Planning</string>
+
+
+    <!--strings for one_agenda_view.xml-->
+    <string name="start_time">Start Time:   </string>
+    <string name="end_time">End Time:   </string>
+    <string name="enter_start_time">NIL</string>
+    <string name="total_length">Total length:   </string>
+
 </resources>
