@@ -37,5 +37,6 @@
     <string name="end_time">End Time:   </string>
     <string name="enter_start_time">NIL</string>
     <string name="total_length">Total length:   </string>
+    <string name="add_day">Add a day</string>
 
 </resources>
