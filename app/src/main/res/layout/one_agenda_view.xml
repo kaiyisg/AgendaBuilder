@@ -8,7 +8,8 @@
     tools:context=".android.AgendaActivity"
     tools:showIn="@layout/activity_agenda"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/one_agenda_view_id">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -33,10 +34,11 @@
                     android:id="@+id/textView15" />
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:inputType="time"
                     android:ems="10"
+                    android:maxLength="5"
                     android:id="@+id/editText4" />
             </LinearLayout>
 
@@ -87,10 +89,23 @@
             android:layout_height="match_parent"></FrameLayout>
     </LinearLayout>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Activity"
+        android:id="@+id/button7"
+        android:layout_gravity="center_horizontal" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView2"
-        android:fillViewport="false" />
+        android:fillViewport="false" >
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableLayout>
+    </ScrollView>
 
 </LinearLayout>

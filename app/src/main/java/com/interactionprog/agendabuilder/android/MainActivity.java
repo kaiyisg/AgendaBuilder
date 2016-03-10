@@ -2,6 +2,7 @@ package com.interactionprog.agendabuilder.android;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.interactionprog.agendabuilder.android.view.AllActivitiesView;
 import com.interactionprog.agendabuilder.android.view.BgActivitiesView;
 import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
+import com.interactionprog.agendabuilder.android.AgendaActivity;
 
 import java.util.List;
 
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         AgendaBuilderApplication app = new AgendaBuilderApplication();
 
         //initializing model with already present data
-        //agendaModel = app.getModel();
         agendaModel = AgendaModel.getModelWithExampleData();
 
         //initialize buttons and widgets for controller
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //Intent intent = new Intent;
+                Intent intent = new Intent(getApplicationContext(),AgendaActivity.class);
+                startActivity(intent);
 
             }
         });
