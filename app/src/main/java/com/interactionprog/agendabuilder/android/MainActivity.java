@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.interactionprog.agendabuilder.R;
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     Button addActivityButton;
     Button goToAgendaPlanningButton;
     Button editSelectedActivityButton;
+    Spinner parkedActivitySelectorDropdown;
+    BgActivitiesView bgActivitiesView;
+    AllActivitiesView allActivitiesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +45,23 @@ public class MainActivity extends AppCompatActivity {
 
         //initializing buttons and getting model
         AgendaBuilderApplication app = new AgendaBuilderApplication();
-        agendaModel = app.getModel();
+
+        //initializing model with already present data
+        //agendaModel = app.getModel();
+        agendaModel = AgendaModel.getModelWithExampleData();
+
+        //initialize buttons and widgets for controller
         addActivityButton = (Button)findViewById(R.id.button3);
         goToAgendaPlanningButton = (Button)findViewById(R.id.button4);
         editSelectedActivityButton = (Button)findViewById(R.id.button5);
+        parkedActivitySelectorDropdown = (Spinner)findViewById(R.id.spinner2);
 
         //initializing views
-        BgActivitiesView bgActivitiesView = new BgActivitiesView(
-                findViewById(R.id.bg_activities_id), agendaModel);
-        AllActivitiesView allActivitiesView = new AllActivitiesView(
-                findViewById(R.id.all_activities_id), agendaModel);
+        bgActivitiesView = new BgActivitiesView(findViewById(R.id.bg_activities_id), agendaModel);
+        allActivitiesView = new AllActivitiesView(findViewById(R.id.all_activities_id), agendaModel);
 
 
+        //adding a new parked activity
         addActivityButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -137,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //button to go to the next page to plan the agenda
         goToAgendaPlanningButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //button to edit the currently selected activity
         editSelectedActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +166,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //changing the items in dropdown
+        parkedActivitySelectorDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String chosenString = parkedActivitySelectorDropdown.getSelectedItem().toString();
+                AllActivitiesView.updateParkedActivityDetails(chosenString);
+                //allActivitiesView.update(agendaModel, chosenString);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 

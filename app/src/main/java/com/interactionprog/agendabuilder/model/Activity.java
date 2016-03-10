@@ -60,6 +60,18 @@ public class Activity extends Observable {
         notifyObservers("TypeChanged");
     }
 
+    public String getTypeInString(){
+        if(this.type == Activity.PRESENTATION){
+            return "Presentation";
+        }else if(this.type == Activity.DISCUSSION){
+            return "Discussion";
+        }else if(this.type==Activity.BREAK){
+            return "Break";
+        }else{
+            return "Group Work";
+        }
+    }
+
 
 }
 

@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         android:layout_marginLeft="10dp">
 
         <TextView
@@ -96,7 +96,7 @@
 
     <ScrollView
         android:layout_width="272dp"
-        android:layout_height="86dp"
+        android:layout_height="77dp"
         android:id="@+id/scrollView"
         android:layout_gravity="center_horizontal"
         android:background="#d1d1d1"

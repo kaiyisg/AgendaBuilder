@@ -82,6 +82,20 @@ public final class AgendaModel extends Observable {
         notifyObservers();
     };
 
+    /*
+     * Getter for the list of activities
+     */
+    public List<Activity> getParkedActivites(){
+        return parkedActivites;
+    }
+
+    /*
+     * Getter for the list of days
+     */
+    public List<Day> getDays(){
+        return days;
+    }
+
     /**
      * you can use this method to create some test data and test your implementation
      */
@@ -94,6 +108,11 @@ public final class AgendaModel extends Observable {
         model.addActivity(new Activity("Working in groups","Working on business model for idea 1",35,1),d,2);
         model.addActivity(new Activity("Idea 1 discussion","Discussing the results of idea 1",15,2),d,3);
         model.addActivity(new Activity("Coffee break","Time for some coffee",20,3),d,4);
+
+        model.addParkedActivity(new Activity("Siesta", "Taking a 2h break", 120, Activity.BREAK));
+        model.addParkedActivity(new Activity("Scrum", "Intense project brainstorming", 90, Activity.DISCUSSION));
+        model.addParkedActivity(new Activity("Client Presentation", "Final presentation to clients", 45, Activity.PRESENTATION));
+
 
         return model;
     }

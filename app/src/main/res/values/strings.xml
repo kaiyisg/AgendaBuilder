@@ -18,7 +18,7 @@
     <string name="activity_type">Type: </string>
     <string name="activity_description">Description: </string>
     <string name="edit_selected">Edit Selected Activity</string>
-    <string name="activity_editing">Activity Editing</string>
+    <string name="activity_editing">Edit Parked Activities</string>
 
 
     <!--strings for bg_activities_view.xml-->
