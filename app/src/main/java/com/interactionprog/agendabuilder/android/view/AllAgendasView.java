@@ -122,7 +122,7 @@ public class AllAgendasView implements Observer {
         }
 
         //initializing the controller for the activity
-        OneAgendaController oneAgendaController = new OneAgendaController(oneAgendaView, agendaModel);
+        OneAgendaController oneAgendaController = new OneAgendaController(oneAgendaView, agendaModel, day);
 
         return oneAgendaView;
     }

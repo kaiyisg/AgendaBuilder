@@ -114,6 +114,10 @@ public class Day extends Observable {
         return position;
     }
 
+    public int getLastPositionIndex(){
+        return activities.size();
+    }
+
     /**
      * removes an activity from specific position
      * this method will be called when needed from the model

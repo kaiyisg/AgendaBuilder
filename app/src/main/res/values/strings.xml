@@ -39,4 +39,8 @@
     <string name="total_length">Total length:   </string>
     <string name="add_day">Add a day</string>
 
+    <string name="choose_parked_activity">Choose a parked activity to add</string>
+    <string name="choose_activity">Add activity</string>
+    <string name="cancel_activity">Cancel</string>
+
 </resources>
