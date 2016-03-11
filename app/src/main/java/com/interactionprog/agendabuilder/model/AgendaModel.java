@@ -28,6 +28,8 @@ public final class AgendaModel extends Observable {
     public Day addDay(int startHour, int startMin) {
         Day d = new Day(startHour, startMin);
         days.add(d);
+        setChanged();
+        notifyObservers("DayAdded");
         return d;
     }
 

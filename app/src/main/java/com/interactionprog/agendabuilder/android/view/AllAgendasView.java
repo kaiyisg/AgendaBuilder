@@ -12,6 +12,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
+import com.interactionprog.agendabuilder.android.OneAgendaController;
 import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
 import com.interactionprog.agendabuilder.model.Day;
@@ -43,6 +44,10 @@ public class AllAgendasView implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
+
+        AgendaModel model = AgendaModel.getInstance();
+        initializeAllDays(model.getDays());
+        
     }
 
     private void initializeAllDays(List<Day> days){
@@ -104,8 +109,6 @@ public class AllAgendasView implements Observer {
             //adding the name of each activity to the row
             TextView nameView = new TextView(oneAgendaView.getContext());
             TableRow.LayoutParams llp = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
-            //nameView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-            //LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             llp.setMargins(20, 0, 0, 10); // llp.setMargins(left, top, right, bottom);
             nameView.setLayoutParams(llp);
             nameView.setText(act.getName());
@@ -117,6 +120,9 @@ public class AllAgendasView implements Observer {
             //setting the next current time for the next activity
             currentTime+=act.getLength();
         }
+
+        //initializing the controller for the activity
+        OneAgendaController oneAgendaController = new OneAgendaController(oneAgendaView, agendaModel);
 
         return oneAgendaView;
     }
