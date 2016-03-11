@@ -1,14 +1,18 @@
 package com.interactionprog.agendabuilder.android.view;
 
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
+import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
 import com.interactionprog.agendabuilder.model.Day;
 
@@ -33,6 +37,8 @@ public class AllAgendasView implements Observer {
         horizontalScrollView = (HorizontalScrollView)view.findViewById(R.id.horizontalScrollView);
 
         initializeAllDays(model.getDays());
+
+        agendaModel.addObserver(this);
     }
 
     @Override
@@ -68,15 +74,63 @@ public class AllAgendasView implements Observer {
         ll.setMargins(0, 0, 20, 0);
         oneAgendaView.setLayoutParams(ll);
 
-        EditText startTime = (EditText)oneAgendaView.findViewById(R.id.editText4);
+        //initializing the start and end timings on top
+        EditText startTimeHour = (EditText)oneAgendaView.findViewById(R.id.editText4);
+        EditText startTimeMin = (EditText)oneAgendaView.findViewById(R.id.editText5);
         TextView endTime = (TextView)oneAgendaView.findViewById(R.id.textView17);
         TextView totalTime = (TextView)oneAgendaView.findViewById(R.id.textView19);
+        startTimeHour.setText(day.getStartHour());
+        startTimeMin.setText(day.getStartMin());
+        endTime.setText(day.getEndTime());
+        totalTime.setText(day.getTotalLengthTime());
 
-        startTime.setText(String.valueOf(day.getStart()));
-        endTime.setText(String.valueOf(day.getEnd()));
-        totalTime.setText(String.valueOf(day.getTotalLength()));
+        //adding the activities view to each day
+        int currentTime = day.getStart();
+        TableLayout tl = (TableLayout)oneAgendaView.findViewById(R.id.table_layout_id);
+        List<Activity> activities = day.getActivities();
+
+        for(Activity act:activities){
+
+            //getting and setting up each row
+            TableRow tr = new TableRow(oneAgendaView.getContext());
+            tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+            //adding time of the activity start to the row
+            TextView timeView = new TextView(oneAgendaView.getContext());
+            timeView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            timeView.setText(makeIntoTime(currentTime));
+            tr.addView(timeView);
+
+            //adding the name of each activity to the row
+            TextView nameView = new TextView(oneAgendaView.getContext());
+            TableRow.LayoutParams llp = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+            //nameView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            //LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            llp.setMargins(20, 0, 0, 10); // llp.setMargins(left, top, right, bottom);
+            nameView.setLayoutParams(llp);
+            nameView.setText(act.getName());
+            tr.addView(nameView);
+
+            //adding the row to the table
+            tl.addView(tr);
+
+            //setting the next current time for the next activity
+            currentTime+=act.getLength();
+        }
 
         return oneAgendaView;
+    }
+
+    private String makeIntoTime(int time){
+        String hour = String.valueOf(time/60);
+        if(hour.length()==1){
+            hour = "0" + hour;
+        }
+        String min = String.valueOf(time%60);
+        if(min.length()==1){
+            min = "0" + min;
+        }
+        return hour+":"+min;
     }
 
 }

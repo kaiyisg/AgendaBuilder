@@ -1,8 +1,5 @@
 package com.interactionprog.agendabuilder.model;
 
-/**
- * Created by Lee Han Young on 25-Feb-16.
- */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -16,12 +13,32 @@ public class Day extends Observable {
 
     List<Activity> activities = new ArrayList<Activity>();
 
+    public List<Activity> getActivities(){
+        return activities;
+    }
+
     public Day(int hour, int min) {
         start = hour*60 + min;
     }
 
     public int getStart() {
         return start;
+    }
+
+    public String getStartHour(){
+        String hour = String.valueOf(getStart()/60);
+        if(hour.length()==1){
+            hour = "0" + hour;
+        }
+        return hour;
+    }
+
+    public String getStartMin(){
+        String min = String.valueOf(getStart()%60);
+        if(min.length()==1){
+            min = "0" + min;
+        }
+        return min;
     }
 
     public void setStart(int start) {
@@ -41,10 +58,33 @@ public class Day extends Observable {
         return result;
     }
 
+    public String getTotalLengthTime(){
+        String hour = String.valueOf(getTotalLength()/60);
+        if(hour.length()==1){
+            hour = "0" + hour;
+        }
+        String min = String.valueOf(getTotalLength()%60);
+        if(min.length()==1){
+            min = "0" + min;
+        }
+        return hour+":"+min;
+    }
+
     public int getEnd() {
         return getStart() + getTotalLength();
     }
 
+    public String getEndTime(){
+        String hour = String.valueOf(getEnd()/60);
+        if(hour.length()==1){
+            hour = "0" + hour;
+        }
+        String min = String.valueOf(getEnd()%60);
+        if(min.length()==1){
+            min = "0" + min;
+        }
+        return hour+":"+min;
+    }
 
     /**
      * returns the length (in minutes) of activities of certain type

@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.AllAgendasView;
 import com.interactionprog.agendabuilder.android.view.OneAgendaView;
+import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
 import com.interactionprog.agendabuilder.model.Day;
 
@@ -30,11 +31,8 @@ public class AgendaActivity extends AppCompatActivity {
 
         //getting model and days
         final AgendaModel agendaModel = AgendaModel.getInstance();
+        List<Activity> activities = agendaModel.getParkedActivites();
         List<Day> allDays = agendaModel.getDays();
-        for(Day d:allDays){
-            OneAgendaView oneAgendaView = new OneAgendaView
-                    (findViewById(R.id.one_agenda_view_id), agendaModel, d);
-        }
 
         //initializing views
         allAgendasView = new AllAgendasView(findViewById(R.id.all_agendas_view_id), agendaModel);

@@ -125,12 +125,13 @@ public final class AgendaModel extends Observable {
         model.addActivity(new Activity("Idea 1","Presenting idea 1",30,0),d,1);
         model.addActivity(new Activity("Working in groups","Working on business model for idea 1",35,1),d,2);
         model.addActivity(new Activity("Idea 1 discussion","Discussing the results of idea 1",15,2),d,3);
-        model.addActivity(new Activity("Coffee break","Time for some coffee",20,3),d,4);
+        model.addActivity(new Activity("Coffee break", "Time for some coffee", 20, 3), d, 4);
 
         model.addParkedActivity(new Activity("Siesta", "Taking a 2h break", 120, Activity.BREAK));
         model.addParkedActivity(new Activity("Scrum", "Intense project brainstorming", 90, Activity.DISCUSSION));
         model.addParkedActivity(new Activity("Client Presentation", "Final presentation to clients", 45, Activity.PRESENTATION));
 
+        instance = model;
 
         return model;
     }
