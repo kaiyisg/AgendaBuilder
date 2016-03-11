@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -88,6 +89,36 @@ public class AllAgendasView implements Observer {
         startTimeMin.setText(day.getStartMin());
         endTime.setText(day.getEndTime());
         totalTime.setText(day.getTotalLengthTime());
+
+        //initializing the colors ratio on top
+        FrameLayout presentationBlueLayout = (FrameLayout)oneAgendaView.findViewById(R.id.presentation_blue_id);
+        FrameLayout discussionGreenLayout = (FrameLayout)oneAgendaView.findViewById(R.id.discussion_green_id);
+        FrameLayout groupworkRedLayout = (FrameLayout)oneAgendaView.findViewById(R.id.groupwork_red_id);
+        FrameLayout breakYellowLayout = (FrameLayout)oneAgendaView.findViewById(R.id.break_yellow_id);
+
+
+
+        FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.PRESENTATION));
+        presentationBlueLayout.setLayoutParams(param);
+
+        /*
+        param = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.DISCUSSION));
+        discussionGreenLayout.setLayoutParams(param);
+
+        param = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.GROUP_WORK));
+        groupworkRedLayout.setLayoutParams(param);
+
+        param = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.BREAK));
+        breakYellowLayout.setLayoutParams(param);
+        */
 
         //adding the activities view to each day
         int currentTime = day.getStart();
