@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -96,29 +97,26 @@ public class AllAgendasView implements Observer {
         FrameLayout groupworkRedLayout = (FrameLayout)oneAgendaView.findViewById(R.id.groupwork_red_id);
         FrameLayout breakYellowLayout = (FrameLayout)oneAgendaView.findViewById(R.id.break_yellow_id);
 
-
-
-        FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.PRESENTATION));
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+                day.getLengthByType(Activity.PRESENTATION));
         presentationBlueLayout.setLayoutParams(param);
 
-        /*
-        param = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.DISCUSSION));
+        param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+                day.getLengthByType(Activity.DISCUSSION));
         discussionGreenLayout.setLayoutParams(param);
 
-        param = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.GROUP_WORK));
+        param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+                day.getLengthByType(Activity.GROUP_WORK));
         groupworkRedLayout.setLayoutParams(param);
 
-        param = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, day.getLengthByType(Activity.BREAK));
+        param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+                day.getLengthByType(Activity.BREAK));
         breakYellowLayout.setLayoutParams(param);
-        */
+
 
         //adding the activities view to each day
         int currentTime = day.getStart();

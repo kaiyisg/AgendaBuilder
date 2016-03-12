@@ -107,25 +107,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/presentation_blue_id"
-                android:background="@color/presentation_blue"></FrameLayout>
+                android:background="@color/presentation_blue"
+                android:layout_weight="0"></FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/discussion_green_id"
-                android:background="@color/discussion_green"></FrameLayout>
+                android:background="@color/discussion_green"
+                android:layout_weight="0"></FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/groupwork_red_id"
-                android:background="@color/groupwork_red"></FrameLayout>
+                android:background="@color/groupwork_red"
+                android:layout_weight="0"></FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/break_yellow_id"
-                android:background="@color/break_yellow"></FrameLayout>
+                android:background="@color/break_yellow"
+                android:layout_weight="0"></FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
