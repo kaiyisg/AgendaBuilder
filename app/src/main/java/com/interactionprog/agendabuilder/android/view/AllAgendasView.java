@@ -2,6 +2,7 @@ package com.interactionprog.agendabuilder.android.view;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +129,19 @@ public class AllAgendasView implements Observer {
             //getting and setting up each row
             TableRow tr = new TableRow(oneAgendaView.getContext());
             tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+
+            //setting the colors of each row
+            Resources resource = oneAgendaView.getContext().getResources();
+            if(act.getType()==Activity.BREAK){
+                tr.setBackgroundColor(resource.getColor(R.color.break_yellow));
+            }else if (act.getType()==Activity.DISCUSSION){
+                tr.setBackgroundColor(resource.getColor(R.color.discussion_green));
+            }else if (act.getType()==Activity.GROUP_WORK){
+                tr.setBackgroundColor(resource.getColor(R.color.groupwork_red));
+            }else{
+                tr.setBackgroundColor(resource.getColor(R.color.presentation_blue));
+            }
+
 
             //adding time of the activity start to the row
             TextView timeView = new TextView(oneAgendaView.getContext());
