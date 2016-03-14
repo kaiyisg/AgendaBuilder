@@ -2,12 +2,18 @@ package com.interactionprog.agendabuilder.android;
 
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.ActivityAdderDialog;
@@ -22,6 +28,7 @@ public class OneAgendaController {
     View view;
     AgendaModel agendaModel;
     Day day;
+    TableLayout tableLayout;
     Button addActivityButton;
 
     Button addActivityInDialogButton; //button 9
@@ -29,11 +36,12 @@ public class OneAgendaController {
     ActivityAdderDialog activityAdderDialog;
     Spinner parkedActivitySelectorDropdown;
 
-    public OneAgendaController(View v, AgendaModel model, Day d){
+    public OneAgendaController(View v, AgendaModel model, Day d, TableLayout table){
 
         this.view = v;
         this.agendaModel = model;
         this.day = d;
+        this.tableLayout = table;
 
         addActivityButton = (Button)v.findViewById(R.id.button7);
 
@@ -46,7 +54,47 @@ public class OneAgendaController {
             }
         });
 
+        table.setOnDragListener(new MyDragListener());
 
+
+    }
+
+    class MyDragListener implements View.OnDragListener{
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+
+            int action = event.getAction();
+
+            switch(action){
+                case DragEvent.ACTION_DRAG_STARTED:
+                    return true;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    return true;
+                case DragEvent.ACTION_DROP:
+
+                    ClipDescription description = event.getClipDescription();
+                    String positionStirng = description.toString();
+                    int positionOfActivityInAgenda = Integer.valueOf(positionStirng.charAt(0));
+                    ClipData.Item item = event.getClipData().getItemAt(0);
+
+                    // Dropped, reassign View to ViewGroup
+                    View view = (View) event.getLocalState();
+                    ViewGroup owner = (ViewGroup) view.getParent();
+                    owner.removeView(view);
+
+                    LinearLayout container = (LinearLayout) v;
+                    container.addView(view);
+                    view.setVisibility(View.VISIBLE);
+                    return true;
+
+                case DragEvent.ACTION_DRAG_ENDED:
+                default:
+                    return false;
+            }
+        }
     }
 
     private void activityAdderDialogOpener(View v){

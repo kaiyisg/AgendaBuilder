@@ -15,6 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
+import com.interactionprog.agendabuilder.android.OneActivityController;
 import com.interactionprog.agendabuilder.android.OneAgendaController;
 import com.interactionprog.agendabuilder.model.Activity;
 import com.interactionprog.agendabuilder.model.AgendaModel;
@@ -124,6 +125,8 @@ public class AllAgendasView implements Observer {
         TableLayout tl = (TableLayout)oneAgendaView.findViewById(R.id.table_layout_id);
         List<Activity> activities = day.getActivities();
 
+        int positionOfActivityInAgenda = 0;
+
         for(Activity act:activities){
 
             //getting and setting up each row
@@ -142,30 +145,39 @@ public class AllAgendasView implements Observer {
                 tr.setBackgroundColor(resource.getColor(R.color.presentation_blue));
             }
 
-
             //adding time of the activity start to the row
             TextView timeView = new TextView(oneAgendaView.getContext());
-            timeView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            timeView.setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
             timeView.setText(makeIntoTime(currentTime));
             tr.addView(timeView);
 
             //adding the name of each activity to the row
             TextView nameView = new TextView(oneAgendaView.getContext());
-            TableRow.LayoutParams llp = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+            TableRow.LayoutParams llp = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
             llp.setMargins(20, 0, 0, 10); // llp.setMargins(left, top, right, bottom);
             nameView.setLayoutParams(llp);
             nameView.setText(act.getName());
             tr.addView(nameView);
+
+            //initializing the activity row controller that controls drag and drop
+            OneActivityController oneActivityController = new
+                    OneActivityController(oneAgendaView,
+                    agendaModel,act,tr,positionOfActivityInAgenda);
 
             //adding the row to the table
             tl.addView(tr);
 
             //setting the next current time for the next activity
             currentTime+=act.getLength();
+            //setting the next position for the next activity
+            positionOfActivityInAgenda+=1;
         }
 
         //initializing the controller for the activity
-        OneAgendaController oneAgendaController = new OneAgendaController(oneAgendaView, agendaModel, day);
+        OneAgendaController oneAgendaController = new OneAgendaController(
+                oneAgendaView, agendaModel, day, tl);
 
         return oneAgendaView;
     }
