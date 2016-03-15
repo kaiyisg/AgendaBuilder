@@ -27,7 +27,7 @@ public class OneAgendaController {
 
     View view;
     AgendaModel agendaModel;
-    Day day;
+    final Day day;
     TableLayout tableLayout;
     Button addActivityButton;
 
@@ -54,17 +54,27 @@ public class OneAgendaController {
             }
         });
 
-        table.setOnDragListener(new MyDragListener());
+        table.setOnDragListener(new MyDragListener(day));
 
 
     }
 
     class MyDragListener implements View.OnDragListener{
 
+        Day day;
+
+        MyDragListener(Day d){
+            this.day = d;
+
+        }
+
         @Override
         public boolean onDrag(View v, DragEvent event) {
 
             int action = event.getAction();
+
+            //this method call is only triggered to add an activity to the bottom of the list
+            //activity controller tied to table row will be triggered first in any other case
 
             switch(action){
                 case DragEvent.ACTION_DRAG_STARTED:
@@ -75,19 +85,37 @@ public class OneAgendaController {
                     return true;
                 case DragEvent.ACTION_DROP:
 
-                    ClipDescription description = event.getClipDescription();
-                    String positionStirng = description.toString();
-                    int positionOfActivityInAgenda = Integer.valueOf(positionStirng.charAt(0));
-                    ClipData.Item item = event.getClipData().getItemAt(0);
+                    String description = event.getClipDescription().toString();
+
+                    /*
+                    String positionString = "";
+                    int stringLength = description.length();
+                    boolean addingToPositionString = false;
+                    for(int i=0;i<stringLength;i++){
+                        char braces = ;
+                        if(description.charAt(i)==[{]){
+
+                        }
+                    }*/
+
+                    int positionOfActivityInAgenda = Integer.valueOf(description.charAt(18))-48;
+                    //todo this is a dirty fix, does not account for things that are double digit indexes
 
                     // Dropped, reassign View to ViewGroup
+                    /*
                     View view = (View) event.getLocalState();
                     ViewGroup owner = (ViewGroup) view.getParent();
                     owner.removeView(view);
 
                     LinearLayout container = (LinearLayout) v;
                     container.addView(view);
-                    view.setVisibility(View.VISIBLE);
+                    view.setVisibility(View.VISIBLE);*/
+
+
+                    agendaModel.removeActivityFromDay(day, positionOfActivityInAgenda);
+
+                    //agendaModel.addActivity(parkedActivity,day, day.getLastPositionIndex());
+
                     return true;
 
                 case DragEvent.ACTION_DRAG_ENDED:

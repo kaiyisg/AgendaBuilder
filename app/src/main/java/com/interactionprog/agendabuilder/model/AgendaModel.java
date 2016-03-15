@@ -102,6 +102,16 @@ public final class AgendaModel extends Observable {
         notifyObservers();
     };
 
+    public void removeActivityFromDay(Day d, int position)
+    {
+        addParkedActivity(d.removeActivity(position));
+        setChanged();
+        notifyObservers();
+
+    }
+
+
+
     /*
      * Getter for the list of activities
      */

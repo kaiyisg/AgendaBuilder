@@ -41,7 +41,11 @@ public class AllActivitiesView implements Observer {
     @Override
     public void update(Observable observable, Object data) {
 
-        String thing = data.toString();
+        String thing = "";
+
+        if(data!=null){
+            thing = data.toString();
+        }
 
         //updating spinenr every time a new activity is added
         updateParkedActivityList();
