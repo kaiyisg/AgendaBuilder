@@ -5,12 +5,15 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -18,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.ActivityAdderDialog;
@@ -72,9 +76,50 @@ public class OneAgendaController {
         table.setOnDragListener(new TableDragListener(positionOfDayInAgendaModel));
 
         //purpose of drag listener is to listen when rows are dragged onto controllers
-
         agendaAdder.setOnDragListener(new AddDragListener(positionOfDayInAgendaModel));
         agendaDeleter.setOnDragListener(new RemoveDragListener());
+
+        //purpose of this is to listen out to changes in start time
+        final EditText startTimeHour = (EditText)view.findViewById(R.id.editText4);
+        final EditText startTimeMin = (EditText)view.findViewById(R.id.editText5);
+
+        startTimeHour.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                int hour = Integer.valueOf(startTimeHour.getText().toString());
+                int min = Integer.valueOf(startTimeMin.getText().toString());
+                int length = day.getTotalLength();
+                if (AgendaModel.checkIfSensibleStartTime(hour,min,length)){
+                    int start = hour*60 + min;
+                    agendaModel.setStartTimingOfDay(day,start);
+                }else{
+                    Toast.makeText(view.getContext(), "Please emter a sensible hour",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+        startTimeMin.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                int hour = Integer.valueOf(startTimeHour.getText().toString());
+                int min = Integer.valueOf(startTimeMin.getText().toString());
+                int length = day.getTotalLength();
+                if (AgendaModel.checkIfSensibleStartTime(hour,min,length)){
+                    int start = hour*60 + min;
+                    agendaModel.setStartTimingOfDay(day,start);
+                }else{
+                    Toast.makeText(view.getContext(), "Please emter a sensible minute",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     class TableDragListener implements View.OnDragListener{

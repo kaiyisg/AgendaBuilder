@@ -3,19 +3,23 @@ package com.interactionprog.agendabuilder.android.view;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
+import com.interactionprog.agendabuilder.android.AllAgendasController;
 import com.interactionprog.agendabuilder.android.OneActivityController;
 import com.interactionprog.agendabuilder.android.OneAgendaController;
 import com.interactionprog.agendabuilder.model.Activity;
@@ -69,6 +73,16 @@ public class AllAgendasView implements Observer {
             topLinearLayout.addView(initializeOneDay(d,dayPosition));
             dayPosition+=1;
         }
+
+        //adding the button that adds more views
+        Button dayAdderButton = new Button(view.getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        dayAdderButton.setLayoutParams(params);
+        dayAdderButton.setGravity(Gravity.CENTER_HORIZONTAL);
+        dayAdderButton.setText("Add Day");
+        AllAgendasController allAgendasController = new AllAgendasController(view, agendaModel, dayAdderButton);
+        topLinearLayout.addView(dayAdderButton);
 
         //add the view to my scroll view
         horizontalScrollView.addView(topLinearLayout);

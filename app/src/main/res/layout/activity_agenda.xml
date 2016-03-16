@@ -25,12 +25,5 @@
             android:layout_marginRight="5dp" />
     </HorizontalScrollView>
 
-    <Button
-        android:layout_width="116dp"
-        android:layout_height="wrap_content"
-        android:text="@string/add_day"
-        android:id="@+id/button8"
-        android:layout_gravity="center_vertical" />
-
 
 </LinearLayout>

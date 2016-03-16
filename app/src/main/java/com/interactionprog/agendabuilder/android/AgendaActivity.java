@@ -32,17 +32,6 @@ public class AgendaActivity extends AppCompatActivity {
 
         //initializing views
         allAgendasView = new AllAgendasView(findViewById(R.id.all_agendas_view_id), agendaModel);
-
-        //initializing buttons
-        addDayButton = (Button)findViewById(R.id.button8);
-
-        //adding day with a default starting timing of 8:00am
-        addDayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                agendaModel.addDay(8,0);
-            }
-        });
     }
 
 }

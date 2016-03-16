@@ -22,6 +22,28 @@ public final class AgendaModel extends Observable {
         return instance;
     }
 
+    //helps to check if the time given is a sensible starting time
+    public static boolean checkIfSensibleStartTime(int hour, int min, int length) {
+        if (hour >= 24 || hour < 0) {
+            return false;
+        } else if (min >= 60 || min < 0) {
+            return false;
+        }
+        int minutesStarting = hour * 60 + min;
+        int minutesLengthDay = 24 * 60;
+        int totalTime = minutesStarting + length;
+        if (totalTime > minutesLengthDay) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setStartTimingOfDay(Day d, int start){
+        d.setStart(start);
+        setChanged();
+        notifyObservers();
+    }
+
     /**
      * adds create and add a new day to model with starting time (hours and minutes)
      */
