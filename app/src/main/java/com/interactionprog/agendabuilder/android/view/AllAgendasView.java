@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -63,8 +64,10 @@ public class AllAgendasView implements Observer {
         LinearLayout topLinearLayout = new LinearLayout(view.getContext());
         topLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
+        int dayPosition =0;
         for(Day d: days){
-            topLinearLayout.addView(initializeOneDay(d));
+            topLinearLayout.addView(initializeOneDay(d,dayPosition));
+            dayPosition+=1;
         }
 
         //add the view to my scroll view
@@ -72,7 +75,7 @@ public class AllAgendasView implements Observer {
 
     }
 
-    private View initializeOneDay(Day day){
+    private View initializeOneDay(Day day, int positionOfDayInAgendaModel){
 
         //getting layout of one agenda template to fill up
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -120,6 +123,11 @@ public class AllAgendasView implements Observer {
         breakYellowLayout.setLayoutParams(param);
 
 
+        //initializing the vertical scroll view so we can make use of each view later on to add stuff
+        ScrollView verticalScrollView = (ScrollView)oneAgendaView.findViewById(R.id.scrollView2);
+        FrameLayout agendaAdder = (FrameLayout)oneAgendaView.findViewById(R.id.agenda_adder_id);
+        FrameLayout agendaDeleter = (FrameLayout)oneAgendaView.findViewById(R.id.agenda_deleter_id);
+
         //adding the activities view to each day
         int currentTime = day.getStart();
         TableLayout tl = (TableLayout)oneAgendaView.findViewById(R.id.table_layout_id);
@@ -164,7 +172,7 @@ public class AllAgendasView implements Observer {
             //initializing the activity row controller that controls drag and drop
             OneActivityController oneActivityController = new
                     OneActivityController(oneAgendaView,
-                    agendaModel,act,tr,positionOfActivityInAgenda);
+                    agendaModel,act,tr,positionOfActivityInAgenda, positionOfDayInAgendaModel);
 
             //adding the row to the table
             tl.addView(tr);
@@ -177,7 +185,8 @@ public class AllAgendasView implements Observer {
 
         //initializing the controller for the activity
         OneAgendaController oneAgendaController = new OneAgendaController(
-                oneAgendaView, agendaModel, day, tl);
+                oneAgendaView, agendaModel, positionOfDayInAgendaModel, tl,
+                agendaAdder,agendaDeleter, day);
 
         return oneAgendaView;
     }

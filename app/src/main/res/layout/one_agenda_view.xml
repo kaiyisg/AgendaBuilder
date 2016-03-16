@@ -174,12 +174,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView2"
-        android:fillViewport="false" >
+        android:fillViewport="true" >
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/table_layout_id"></TableLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/table_layout_id">
+
+            </TableLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/agenda_adder_id">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/drop_to_add"
+                    android:id="@+id/textView22"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:background="@color/add_green" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/agenda_deleter_id">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/drop_to_del"
+                    android:id="@+id/textView23"
+                    android:layout_gravity="center|bottom"
+                    android:gravity="center_horizontal"
+                    android:background="@color/delete_red" />
+            </FrameLayout>
+
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

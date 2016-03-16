@@ -43,4 +43,7 @@
     <string name="choose_activity">Add activity</string>
     <string name="cancel_activity">Cancel</string>
 
+    <string name="drop_to_add">Drop activities to add</string>
+    <string name="drop_to_del">Drop activities to park</string>
+
 </resources>

@@ -11,9 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.interactionprog.agendabuilder.R;
 import com.interactionprog.agendabuilder.android.view.ActivityAdderDialog;
@@ -27,21 +31,30 @@ public class OneAgendaController {
 
     View view;
     AgendaModel agendaModel;
-    final Day day;
+    int positionOfDayInAgendaModel;
     TableLayout tableLayout;
+    FrameLayout agendaAdder;
+    FrameLayout agendaDeleter;
     Button addActivityButton;
+    Day day;
+    TextView addActivity;
+    TextView deleteActivity;
 
     Button addActivityInDialogButton; //button 9
     Button cancelActivityInDialogButton; //button 10
     ActivityAdderDialog activityAdderDialog;
     Spinner parkedActivitySelectorDropdown;
 
-    public OneAgendaController(View v, AgendaModel model, Day d, TableLayout table){
+    public OneAgendaController(View v, AgendaModel model, int dayPos, TableLayout table,
+                               FrameLayout adder,FrameLayout deleter, Day d){
 
         this.view = v;
         this.agendaModel = model;
-        this.day = d;
+        this.positionOfDayInAgendaModel = dayPos;
         this.tableLayout = table;
+        this.agendaAdder = adder;
+        this.agendaDeleter = deleter;
+        this.day = d;
 
         addActivityButton = (Button)v.findViewById(R.id.button7);
 
@@ -54,74 +67,200 @@ public class OneAgendaController {
             }
         });
 
-        table.setOnDragListener(new MyDragListener(day));
+        //purpose of drag listener is to listen when rows are dragged onto the table
+        //this means that the row has to reappear back at where it came from
+        table.setOnDragListener(new TableDragListener(positionOfDayInAgendaModel));
 
+        //purpose of drag listener is to listen when rows are dragged onto controllers
 
+        agendaAdder.setOnDragListener(new AddDragListener(positionOfDayInAgendaModel));
+        agendaDeleter.setOnDragListener(new RemoveDragListener());
     }
 
-    class MyDragListener implements View.OnDragListener{
+    class TableDragListener implements View.OnDragListener{
 
-        Day day;
+        int droppedPositionOfDayInList;
 
-        MyDragListener(Day d){
-            this.day = d;
-
+        TableDragListener(int droppedPositionDay){
+            this.droppedPositionOfDayInList = droppedPositionDay;
         }
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
 
             int action = event.getAction();
+            ClipDescription des = event.getClipDescription();
+            if(des!=null) {
+                String description = des.toString();
+                String[] parts = description.split(" ");
+                String initialpositionOfActivityInDayString = parts[2];
+                int initialpositionOfActivityInDay = Integer.valueOf(initialpositionOfActivityInDayString);
+                String initialpositionOfDayInListString = parts[3];
+                int initialpositionOfDayInList = Integer.valueOf(initialpositionOfDayInListString);
 
-            //this method call is only triggered to add an activity to the bottom of the list
-            //activity controller tied to table row will be triggered first in any other case
-
-            switch(action){
-                case DragEvent.ACTION_DRAG_STARTED:
-                    return true;
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    return true;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    return true;
-                case DragEvent.ACTION_DROP:
-
-                    String description = event.getClipDescription().toString();
-
-                    /*
-                    String positionString = "";
-                    int stringLength = description.length();
-                    boolean addingToPositionString = false;
-                    for(int i=0;i<stringLength;i++){
-                        char braces = ;
-                        if(description.charAt(i)==[{]){
-
-                        }
-                    }*/
-
-                    int positionOfActivityInAgenda = Integer.valueOf(description.charAt(18))-48;
-                    //todo this is a dirty fix, does not account for things that are double digit indexes
-
-                    // Dropped, reassign View to ViewGroup
-                    /*
-                    View view = (View) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
-                    owner.removeView(view);
-
-                    LinearLayout container = (LinearLayout) v;
-                    container.addView(view);
-                    view.setVisibility(View.VISIBLE);*/
-
-
-                    agendaModel.removeActivityFromDay(day, positionOfActivityInAgenda);
-
-                    //agendaModel.addActivity(parkedActivity,day, day.getLastPositionIndex());
-
-                    return true;
-
-                case DragEvent.ACTION_DRAG_ENDED:
-                default:
-                    return false;
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        List<Day> allDays = agendaModel.getDays();
+                        Day initialDay = allDays.get(initialpositionOfDayInList);
+                        Day currentDay = allDays.get(droppedPositionOfDayInList);
+                        agendaModel.moveActivity(initialDay, initialpositionOfActivityInDay,
+                                currentDay, initialpositionOfActivityInDay);
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        return true;
+                    default:
+                        return false;
+                }
             }
+            return false;
+        }
+    }
+
+    class AddDragListener implements View.OnDragListener{
+
+        int droppedPositionOfDayInList;
+        boolean set = false;
+        int initialPosAct;
+        int initialPosDay;
+
+        AddDragListener(int droppedPositionDay){
+            this.droppedPositionOfDayInList = droppedPositionDay;
+        }
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+
+            int action = event.getAction();
+            ClipDescription des = event.getClipDescription();
+            if(des!=null ) {
+                String description = des.toString();
+                String[] parts = description.split(" ");
+                String initialpositionOfActivityInDayString = parts[2];
+                int initialpositionOfActivityInDay = Integer.valueOf(initialpositionOfActivityInDayString);
+                String initialpositionOfDayInListString = parts[3];
+                int initialpositionOfDayInList = Integer.valueOf(initialpositionOfDayInListString);
+
+                initialPosAct = initialpositionOfActivityInDay;
+                initialPosDay = initialpositionOfDayInList;
+                set = true;
+
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        List<Day> allDays = agendaModel.getDays();
+                        Day initialDay = allDays.get(initialpositionOfDayInList);
+                        Day currentDay = allDays.get(droppedPositionOfDayInList);
+                        agendaModel.moveActivity(initialDay, initialpositionOfActivityInDay,
+                                currentDay, currentDay.getLastPositionIndex());
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            if(set){
+                set = false;
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        List<Day> allDays = agendaModel.getDays();
+                        Day initialDay = allDays.get(initialPosDay);
+                        Day currentDay = allDays.get(droppedPositionOfDayInList);
+                        agendaModel.moveActivity(initialDay, initialPosAct,
+                                currentDay, currentDay.getLastPositionIndex());
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    class RemoveDragListener implements View.OnDragListener{
+
+        boolean set = false;
+        int initialPosAct;
+        int initialPosDay;
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+
+            int action = event.getAction();
+            ClipDescription des = event.getClipDescription();
+            if(des!=null) {
+                String description = des.toString();
+                String[] parts = description.split(" ");
+                String initialpositionOfActivityInDayString = parts[2];
+                int initialpositionOfActivityInDay = Integer.valueOf(initialpositionOfActivityInDayString);
+                String initialpositionOfDayInListString = parts[3];
+                int initialpositionOfDayInList = Integer.valueOf(initialpositionOfDayInListString);
+
+                initialPosAct = initialpositionOfActivityInDay;
+                initialPosDay = initialpositionOfDayInList;
+                set = true;
+
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        List<Day> allDays = agendaModel.getDays();
+                        Day initialDay = allDays.get(initialpositionOfDayInList);
+                        agendaModel.removeActivityFromDay(initialDay, initialpositionOfActivityInDay);
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            if(set){
+                set = false;
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        List<Day> allDays = agendaModel.getDays();
+                        Day initialDay = allDays.get(initialPosDay);
+                        agendaModel.removeActivityFromDay(initialDay, initialPosAct);
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            return false;
         }
     }
 
